@@ -61,10 +61,10 @@ if __name__ == '__main__':
                 mouth = get_key_points_mouth(face_landmarks_list[p])
                 mask_mouth = polygon2mask(im.shape[0:2], mouth[:,[1,0]])
                 tmp_mouth = np.mean(_get_value(mask_mouth*btm_pad))
-                data.loc[i, str(p)+"_mouth"]=tmp_nose
+                data.loc[i, str(p)+"_mouth"]=tmp_mouth
 
                 eyes = get_key_points_eyes(face_landmarks_list[p])
                 mask_eyes = polygon2mask(im.shape[0:2], eyes[:,[1,0]])
                 tmp_eyes = np.mean(_get_value(mask_eyes*btm_pad))
-                data.loc[i, str(p)+"_eyes"]=tmp_nose
+                data.loc[i, str(p)+"_eyes"]=tmp_eyes
     data.to_csv("output.csv")
