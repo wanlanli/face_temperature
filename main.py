@@ -5,7 +5,7 @@ import numpy as np
 import imageio
 from skimage.transform import resize
 from skimage.draw import polygon2mask
-from utils import get_key_points, _get_value
+from utils import get_key_points, get_key_points_mouth, get_key_points_eyes, _get_value
 import argparse
 
 if __name__ == '__main__':
@@ -52,8 +52,19 @@ if __name__ == '__main__':
         data.loc[i,'name']=basename
         if(len(face_landmarks_list)>0):
             for p in range(0, len(face_landmarks_list)):
-                points, name = get_key_points(face_landmarks_list[p])
-                mask_p = polygon2mask(im.shape[0:2], points[:,[1,0]])
-                tmp = np.mean(_get_value(mask_p*btm_pad))
-                data.loc[i,p]=tmp
+
+                nose = get_key_points(face_landmarks_list[p])
+                mask_nose = polygon2mask(im.shape[0:2], nose[:,[1,0]])
+                tmp_nose = np.mean(_get_value(mask_nose*btm_pad))
+                data.loc[i, str(p)+"_nose"]=tmp_nose
+
+                mouth = get_key_points_mouth(face_landmarks_list[p])
+                mask_mouth = polygon2mask(im.shape[0:2], mouth[:,[1,0]])
+                tmp_mouth = np.mean(_get_value(mask_mouth*btm_pad))
+                data.loc[i, str(p)+"_mouth"]=tmp_nose
+
+                eyes = get_key_points_eyes(face_landmarks_list[p])
+                mask_eyes = polygon2mask(im.shape[0:2], eyes[:,[1,0]])
+                tmp_eyes = np.mean(_get_value(mask_eyes*btm_pad))
+                data.loc[i, str(p)+"_eyes"]=tmp_nose
     data.to_csv("output.csv")
